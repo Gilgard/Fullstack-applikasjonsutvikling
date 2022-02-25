@@ -1,0 +1,22 @@
+#title {
+    font-size: x-large;
+    font-weight: bold;
+    margin-bottom: 20px;
+}
+
+#container {
+    display: grid;
+    justify-content: center;
+    margin: 40px;
+}
+
+.input {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    column-gap: 20px;
+}
+  
+.input label {
+    width: 100px;
+}

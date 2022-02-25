@@ -1,7 +1,7 @@
 <template>
   <div class="home">
     <h1>Home</h1>
-    <h3 :v-if="loginStatus == true">Welcome, {{user}}</h3>
+    <h3 :v-if="loginStatus == true">Welcome, {{this.$store.state.username}}</h3>
     <button :v-if="loginStatus == false" @click="onclick()">Log in</button>
   </div>
 </template>

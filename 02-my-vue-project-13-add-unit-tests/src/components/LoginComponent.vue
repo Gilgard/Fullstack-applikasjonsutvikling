@@ -1,18 +1,18 @@
 <template>
-  <div id="loginContainer">
-    <div id="loginTitle">
+  <div id="container">
+    <div id="title">
         <label>Please login!</label>
     </div>
-    <div id="username">
-        <label id="usernameLabel">Username:</label>
+    <div id="username" class="input">
+        <label>Username:</label>
         <textarea id="userfield" v-model="username"></textarea>
-      </div>
-      <div id="password">
-        <label id="passwordLabel">Password: </label>
-        <textarea id="passfield" v-model="password"></textarea>
-        <button v-on:click="handleClickSignin_2">Sign in</button>
-        <label id="loginstatusLabel">{{loginStatus}}</label>
-      </div>
+    </div>
+    <div id="password" class="input">
+      <label>Password: </label>
+      <textarea id="passfield" v-model="password"></textarea>
+      <button v-on:click="handleClickSignin_2">Sign in</button>
+      <label id="loginstatusLabel">{{loginStatus}}</label>
+    </div>
   </div>
 </template>
 
@@ -36,7 +36,7 @@ export default {
       const loginResponse = doLogin(loginRequest);
       console.log(loginResponse)
       loginResponse.then((resolvedResult) => {
-        this.loginStatus = resolvedResult.loginStatus;
+        this.$store.state.loginStatus = resolvedResult.loginStatus;
         // alert("Login2: " + resolvedResult.loginStatus);
       }
       );
@@ -58,29 +58,6 @@ export default {
 
 }
 </script>
-
 <style scoped>
-#loginContainer {
-    display: grid;
-    justify-content: center;
-    margin: 40px;
-}
-
-#loginTitle {
-  font-size: x-large;
-  font-weight: bold;
-  margin-bottom: 20px;
-}
-
-#username, #password {
-  display: flex;
-  flex-direction: row;
-  align-items: center;
-  column-gap: 20px;
-}
-
-#usernameLabel, #passwordLabel {
-    width: 100px;
-}
 
 </style>

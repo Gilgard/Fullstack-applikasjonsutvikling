@@ -1,26 +1,21 @@
 <template>
 <div class="container">
+    <div id="title">
+        <label>Sign up, here!</label>
+    </div>
     <form @submit.prevent="registerUser">
-    <h1>Sign up</h1>
-    <input
-        type="text"
-        placeholder="Full Name"
-        v-model="name"
-        required
-    />
-
-    <input
-        type="text"
-        placeholder="Email"
-        v-model="email"
-        required
-    />
-
-    <input
-        type="password"
-        placeholder="Password"
-        v-model="password"
-        required/>
+    <div id="name" class="input">
+        <label>Name:</label>
+        <textarea id="namefield" v-model="name" required></textarea>
+    </div>
+    <div id="username" class="input">
+        <label>Username:</label>
+        <textarea id="userfield" v-model="username" required></textarea>
+    </div>
+    <div id="password" class="input">
+        <label>Password: </label>
+        <textarea id="passfield" v-model="password" required></textarea>
+    </div>
     <button type="submit">Create Account</button>
     </form>
 </div>
@@ -35,7 +30,7 @@ export default {
     data() {
         return {
         name: "",
-        email: "",
+        username: "",
         password: "",
         };
     },
@@ -43,7 +38,7 @@ export default {
         async registerUser() {
         await axios.post("", {
             name: this.name,
-            email: this.email,
+            username: this.username,
             password: this.password,
         });
         router.push({ name: 'Home' })
