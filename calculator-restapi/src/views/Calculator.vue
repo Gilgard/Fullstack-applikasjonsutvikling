@@ -74,22 +74,18 @@ export default {
       this.clear();
     },
     divide() {
-      this.operator = (a, b) => b / a;
-      this.operatorSign = "÷";
+      this.operatorSign = "/";
       this.setPrevious();
     },
     multiply() {
-      this.operator = (a, b) => a * b;
       this.operatorSign = "*";
       this.setPrevious();
     },
     add() {
-      this.operator = (a, b) => a + b;
       this.operatorSign = "+";
       this.setPrevious();
     },
     subtract() {
-      this.operator = (a, b) => b - a;
       this.operatorSign = "-";
       this.setPrevious();
     },
@@ -112,14 +108,12 @@ export default {
           var result = response.data
           this.pushToHistory(result);
           this.operatorClicked = false;
-          this.operatorSign = "";
-          this.previous = result;
-          this.current = result;
-          this.toClear = true;
+          this.clear();
         })
         .catch(error => console.error(error));
       }
     },
+    
     pushToHistory(result) {
       this.history.push(
         this.previous +
