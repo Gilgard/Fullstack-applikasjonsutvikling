@@ -93,44 +93,38 @@ export default {
     },
     equals() {
       if (this.operatorClicked) {
-        var equation =
+        let equation =
           this.previous + " " + this.operatorSign + " " + this.current;
 
         if (equation == null) {
           console.log("No equation found");
+          return;
         }
 
         axios({
-          url: "http://localhost:8080/calculator",
+          url: "https://localhost:8443/calculator",
           method: "post",
           params: {
             equation: equation,
           },
         })
           .then((response) => {
-            var result = response.data;
-            this.pushToHistory(result);
+            console.log(response);
+            this.getHistory();
             this.operatorClicked = false;
             this.clear();
           })
           .catch((error) => console.error(error));
       }
     },
-
-    pushToHistory(result) {
-      this.history.push(
-        this.previous +
-          " " +
-          this.operatorSign +
-          " " +
-          this.current +
-          " = " +
-          result
-      );
-      this.operatorSign = "";
-    },
-    clearHistory() {
-      this.history = [];
+    getHistory() {
+      axios
+        .get("https://localhost:8443/calculator", {})
+        .then((response) => {
+          console.log(response);
+          // parse response and feed to history
+        })
+        .catch((error) => console.error(error));
     },
   },
 };
