@@ -5,40 +5,39 @@
     <div class="btn op" @click="clear()">C</div>
     <div class="btn op" @click="invert()">+/-</div>
     <div class="btn op" @click="percentage()">%</div>
-    <div class="btn op" @click="divide()">÷</div>
+    <div class="btn op" @click="setOperator('/')">÷</div>
 
     <div class="btn" @click="append('7')">7</div>
     <div class="btn" @click="append('8')">8</div>
     <div class="btn" @click="append('9')">9</div>
-    <div class="btn op" @click="multiply()">x</div>
+    <div class="btn op" @click="setOperator('*')">x</div>
 
     <div class="btn" @click="append('4')">4</div>
     <div class="btn" @click="append('5')">5</div>
     <div class="btn" @click="append('6')">6</div>
-    <div class="btn op" @click="subtract()">-</div>
+    <div class="btn op" @click="setOperator('-')">-</div>
 
     <div class="btn" @click="append('1')">1</div>
     <div class="btn" @click="append('2')">2</div>
     <div class="btn" @click="append('3')">3</div>
-    <div class="btn op" @click="add()">+</div>
+    <div class="btn op" @click="setOperator('+')">+</div>
 
     <div class="btn zero" @click="append('0')">0</div>
     <div class="btn" @click="dot()">.</div>
     <div class="btn op" @click="equals()">=</div>
   </div>
   <div class="divider"></div>
-  <div class="history">
-    <h1>History:</h1>
-    <button @click="clearHistory()">Clear</button>
-    <li v-for="item in history" :key="item">{{ item }}</li>
-  </div>
+  <user-history />
 </template>
 
 <script>
-import axios from "axios";
+import UserHistory from "@/components/calc-children/UserHistory.vue";
 
 export default {
   name: "CalculatorComponent",
+  components: {
+    UserHistory,
+  },
   data() {
     return {
       current: "",
@@ -46,7 +45,6 @@ export default {
       operator: null,
       operatorClicked: false,
       operatorSign: "",
-      history: [],
       toClear: false,
     };
   },
@@ -55,76 +53,46 @@ export default {
       this.current = "";
       this.toClear = false;
     },
+
     invert() {
       this.current = parseFloat(this.current) * -1;
     },
+
     percentage() {
       this.current = parseFloat(this.current) / 100;
     },
+
     append(number) {
       if (this.toClear) this.clear();
       this.current = `${this.current}${number}`;
     },
+
     dot() {
       if (this.current.indexOf(".") === -1 && !this.current.includes("."))
         this.append(".");
     },
+
     setPrevious() {
       this.previous = this.current;
       this.current = this.operatorSign;
       this.operatorClicked = true;
       this.clear();
     },
-    divide() {
-      this.operatorSign = "/";
+
+    setOperator(sign) {
+      this.operatorSign = sign;
       this.setPrevious();
     },
-    multiply() {
-      this.operatorSign = "*";
-      this.setPrevious();
-    },
-    add() {
-      this.operatorSign = "+";
-      this.setPrevious();
-    },
-    subtract() {
-      this.operatorSign = "-";
-      this.setPrevious();
-    },
+
     equals() {
       if (this.operatorClicked) {
         let equation =
           this.previous + " " + this.operatorSign + " " + this.current;
-
         if (equation == null) {
           console.log("No equation found");
           return;
         }
-
-        axios({
-          url: "https://localhost:8443/calculator",
-          method: "post",
-          params: {
-            equation: equation,
-          },
-        })
-          .then((response) => {
-            console.log(response);
-            this.getHistory();
-            this.operatorClicked = false;
-            this.clear();
-          })
-          .catch((error) => console.error(error));
       }
-    },
-    getHistory() {
-      axios
-        .get("https://localhost:8443/calculator", {})
-        .then((response) => {
-          console.log(response);
-          // parse response and feed to history
-        })
-        .catch((error) => console.error(error));
     },
   },
 };
@@ -133,16 +101,6 @@ export default {
 <style scoped>
 .divider {
   height: 20px;
-}
-
-.history {
-  width: 100%;
-  max-width: 400px;
-  margin: 0 auto;
-  display: grid;
-  grid-template-columns: 1fr 1fr;
-  grid-template-rows: auto;
-  padding: 10px;
 }
 
 h1 {
@@ -199,12 +157,5 @@ body {
 
 .zero {
   grid-column: 1 / 3;
-}
-
-li {
-  list-style-image: url("../assets/point.png");
-  font-size: 1.5em;
-  grid-column: 1 / 3;
-  text-align: left;
 }
 </style>

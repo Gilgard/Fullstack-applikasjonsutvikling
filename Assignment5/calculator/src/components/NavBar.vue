@@ -72,6 +72,7 @@
 
 <script>
 export default {
+  name: "NavBar",
   computed: {
     loggedIn() {
       return this.$store.state.auth.status.loggedIn;

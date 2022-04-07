@@ -6,7 +6,7 @@
 import CalculatorComponent from "@/components/Calculator.vue";
 
 export default {
-  name: "HomeView",
+  name: "CalculatorView",
   components: {
     CalculatorComponent,
   },
