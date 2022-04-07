@@ -2,10 +2,13 @@ package ntnu.oahjellj.calculator.backend.security.services;
 import java.util.Collection;
 import java.util.List;
 import java.util.Objects;
+import java.util.Set;
+
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 
+import ntnu.oahjellj.calculator.backend.model.Calculation;
 import ntnu.oahjellj.calculator.backend.model.User;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
@@ -18,24 +21,28 @@ public class UserDetailsImpl implements UserDetails {
 
 	@JsonIgnore
 	private String password;
+	private Set<Calculation> history;
+
 	private Collection<? extends GrantedAuthority> authorities;
 
-	public UserDetailsImpl(Long id, String username, String email, String password,
+	public UserDetailsImpl(Long id, String username, String email, String password, Set<Calculation> set,
 			Collection<? extends GrantedAuthority> authorities) {
 		this.id = id;
 		this.username = username;
 		this.email = email;
 		this.password = password;
+		this.history = set;
 		this.authorities = authorities;
 	}
     
 	public static UserDetailsImpl build(User user) {
-		List<GrantedAuthority> authorities = List.of(new SimpleGrantedAuthority("user"));
+		List<GrantedAuthority> authorities = List.of(new SimpleGrantedAuthority("ROLE_USER"));
 		return new UserDetailsImpl(
 				user.getId(), 
 				user.getUsername(), 
 				user.getEmail(),
 				user.getPassword(), 
+				user.getHistory(),
 				authorities);
 	}
 
@@ -60,6 +67,11 @@ public class UserDetailsImpl implements UserDetails {
 	@Override
 	public String getUsername() {
 		return username;
+	}
+
+	
+	public Set<Calculation> getHistory() {
+		return this.history;
 	}
 
 	@Override

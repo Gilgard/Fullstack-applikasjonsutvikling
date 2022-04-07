@@ -1,5 +1,8 @@
 package ntnu.oahjellj.calculator.backend.model;
 
+import java.util.HashSet;
+import java.util.Set;
+
 import javax.persistence.*;
 import javax.validation.constraints.Email;
 import javax.validation.constraints.NotBlank;
@@ -29,6 +32,12 @@ public class User {
 	@NotBlank
 	@Size(max = 120)
 	private String password;
+
+	@OneToMany(fetch = FetchType.EAGER)
+	@JoinTable(	name = "user_calculations", 
+				joinColumns = @JoinColumn(name = "user_id"), 
+				inverseJoinColumns = @JoinColumn(name = "calculation_id"))
+	private Set<Calculation> history = new HashSet<>();
     
 	public User() {}
 
@@ -36,6 +45,7 @@ public class User {
 		this.username = username;
 		this.email = email;
 		this.password = password;
+		this.history.add(new Calculation("1 + 1", "2"));
 	}
 
 	public Long getId() {
@@ -68,5 +78,13 @@ public class User {
 
 	public void setPassword(String password) {
 		this.password = password;
+	}
+
+	public Set<Calculation> getHistory() {
+		return this.history;
+	}
+
+	public void clearHistory() {
+		this.history.clear();;
 	}
 }

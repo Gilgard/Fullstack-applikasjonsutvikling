@@ -11,17 +11,16 @@
 </template>
 
 <script>
+import CalculatorService from "@/services/calculator.service";
+
 export default {
   name: "UserHistory",
+
   data() {
     return {
-      history: [],
+      user: this.$store.state.auth.user,
+      history: ["No history found!"],
     };
-  },
-  computed: {
-    currentUser() {
-      return this.$store.state.auth.user;
-    },
   },
   methods: {
     getLiClass(index) {
@@ -34,10 +33,11 @@ export default {
     },
   },
   mounted() {
-    if (!this.currentUser) {
+    if (!this.user) {
       this.$router.push("/login");
     }
-    this.history = this.$store.calc.history;
+    let username = this.user.username;
+    this.history = CalculatorService.getHistory(username);
   },
 };
 </script>

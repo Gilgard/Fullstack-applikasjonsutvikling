@@ -32,6 +32,7 @@
 
 <script>
 import UserHistory from "@/components/calc-children/UserHistory.vue";
+import CalculatorService from "@/services/calculator.service";
 
 export default {
   name: "CalculatorComponent",
@@ -40,6 +41,7 @@ export default {
   },
   data() {
     return {
+      user: this.$store.state.auth.user,
       current: "",
       previous: null,
       operator: null,
@@ -81,6 +83,7 @@ export default {
 
     setOperator(sign) {
       this.operatorSign = sign;
+      this.operatorClicked = true;
       this.setPrevious();
     },
 
@@ -88,6 +91,14 @@ export default {
       if (this.operatorClicked) {
         let equation =
           this.previous + " " + this.operatorSign + " " + this.current;
+        let response = CalculatorService.calculate(
+          equation,
+          this.user.username
+        );
+        console.log(response);
+        //UserHistory.methods.addLocalHistory(response);
+        this.current = "";
+        this.operatorClicked = false;
         if (equation == null) {
           console.log("No equation found");
           return;
