@@ -33,10 +33,7 @@ public class User {
 	@Size(max = 120)
 	private String password;
 
-	@OneToMany(fetch = FetchType.EAGER)
-	@JoinTable(	name = "user_calculations", 
-				joinColumns = @JoinColumn(name = "user_id"), 
-				inverseJoinColumns = @JoinColumn(name = "calculation_id"))
+	@OneToMany(mappedBy = "user", fetch = FetchType.EAGER)
 	private Set<Calculation> history = new HashSet<>();
     
 	public User() {}
@@ -45,7 +42,6 @@ public class User {
 		this.username = username;
 		this.email = email;
 		this.password = password;
-		this.history.add(new Calculation("1 + 1", "2"));
 	}
 
 	public Long getId() {
@@ -82,6 +78,14 @@ public class User {
 
 	public Set<Calculation> getHistory() {
 		return this.history;
+	}
+
+	public void setHistory(Set<Calculation> history) {
+		this.history = history;
+	}
+
+	public boolean addToHistory(Calculation calculation) {
+		return this.history.add(calculation);
 	}
 
 	public void clearHistory() {

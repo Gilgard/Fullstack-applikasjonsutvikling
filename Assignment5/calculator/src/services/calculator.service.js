@@ -3,13 +3,14 @@ import axios from "axios";
 const API_URL = "https://localhost:8443/api/calc/";
 
 class CalcService {
-  calculate(equation, username) {
+  async calculate(equation, username) {
     axios
       .post(API_URL + "calc", {
         equation: equation,
         username: username,
       })
       .then((response) => {
+        console.log(response.data.message);
         return response.data.message;
       })
       .catch((error) => {

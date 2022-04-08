@@ -4,10 +4,11 @@ import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.ManyToOne;
 import javax.persistence.Table;
 
 @Entity
-@Table(	name = "calculation")
+@Table(	name = "calculations")
 public class Calculation {
     
     @Id
@@ -18,11 +19,15 @@ public class Calculation {
 
     private String result;
 
+    @ManyToOne
+    private User user;
+
     public Calculation() {}
 
-    public Calculation(String equation, String result) {
+    public Calculation(String equation, String result, User user) {
         this.equation = equation;
         this.result = result;
+        this.user = user;
     }
 
     public Long getId() {

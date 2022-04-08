@@ -21,6 +21,7 @@ import ntnu.oahjellj.calculator.backend.payload.request.CalculateRequest;
 import ntnu.oahjellj.calculator.backend.payload.request.HistoryRequest;
 import ntnu.oahjellj.calculator.backend.payload.response.HistoryResponse;
 import ntnu.oahjellj.calculator.backend.payload.response.MessageResponse;
+import ntnu.oahjellj.calculator.backend.repository.CalculationRepository;
 import ntnu.oahjellj.calculator.backend.repository.UserRepository;
 
 @CrossOrigin
@@ -30,6 +31,9 @@ public class CalcController {
 
     @Autowired
 	UserRepository userRepository;
+
+    @Autowired
+    CalculationRepository calculationRepository;
 
     @PostMapping("/history")
 	public ResponseEntity<?> getUserHistory(@Valid @RequestBody HistoryRequest historyRequest) {
@@ -66,13 +70,11 @@ public class CalcController {
         }
 
         User user = userRepository.findByUsername(reqUsername).get();
-        Set<Calculation> history = user.getHistory();
 
         String equation = calculateRequest.getEquation();
         String result = calc(equation);
-        Calculation calculation = new Calculation(equation, result);
-
-        history.add(calculation);
+        Calculation calculation = new Calculation(equation, result, user);
+        calculationRepository.save(calculation);
 
         return ResponseEntity.ok(new MessageResponse(calculation.getResponseMessage()));
     }

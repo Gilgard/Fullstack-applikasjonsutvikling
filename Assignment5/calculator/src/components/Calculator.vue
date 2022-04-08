@@ -87,11 +87,11 @@ export default {
       this.setPrevious();
     },
 
-    equals() {
+    async equals() {
       if (this.operatorClicked) {
         let equation =
           this.previous + " " + this.operatorSign + " " + this.current;
-        let response = CalculatorService.calculate(
+        let response = await CalculatorService.calculate(
           equation,
           this.user.username
         );
